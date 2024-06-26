@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- <meta charset="UTF-8"> -->
+        <title>Webservice SQL</title>
+    </head>
+    <body>
+        <h1>Pesquisas SQL:</h1>
+        <div>
+            <form action="/disciplinas" method="GET">
+                <button type="submit" name="puxa">Listar Disciplinas</button>
+            </form>
+            <form action="/disciplina" method="GET">
+                <label>Insira o Código da Disciplina:</label>
+                <input type="text" placeholder="Ex: CAC31000" name="codigo"
+                pattern="[A-Z]{3}[0-9]{4}" required>
+                <button type="submit">Pesquisar</button>
+            </form>
+            <form id="formEnvio" action="/disciplinas/add" method="POST" onsubmit="submitForm(event)">
+                <label for="codigo">Código:</label>
+                <input type="text" id="codigo" name="codigo" required><br>
+                
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required><br>
+
+                <label for="ementa">Ementa:</label>
+                <input type="text" id="ementa" name="ementa" required><br>
+
+                <label for="ha">Hora Aula: </label>
+                <input type="text" id="horaAula" name="horaAula" required><br>
+
+                <label for="prereq">Pre-Requisito: </label>
+                <input type="text" id="preRequisito" name="preRequisito" required><br>
+
+                <label for="equiv">Equivalencia: </label>
+                <input type="text" id="equivalencia" name="equivalencia" required><br>
+
+                <button type="submit">Enviar</button>
+            </form>
+
+            <!-- <pre id="jsonOutput"></pre> -->
+
+            <script>
+                function submitForm(event)
+                {
+                    event.preventDefault();
+                    const form = document.getElementById("formEnvio");
+                    const formData = new FormData(form);
+
+                    const jsonObject = {};
+                    formData.forEach((value, key) => {
+                        jsonObject[key] = value;
+                    });
+
+                    const jsonOutput = document.getElementById('jsonOutput');
+                    jsonOutput.textContent = JSON.stringify(jsonObject, null, 2);
+
+                    $.ajax({
+                        type: 'POST',
+                        dataType: "json",
+                        contentType:'application/json',
+                        url: '/disciplinas/add',
+                        data: jsonOutput.textContent,
+                        success: function(response) {
+                            console.log('Servo moved successfully');
+                        },
+                        error: function(error) {
+                            console.error('Error moving servo:', error);
+                        }
+                    });
+                }
+                
+            </script>
+
+        </div>
+    </body>
+</html>
