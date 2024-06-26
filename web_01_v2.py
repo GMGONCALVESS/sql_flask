@@ -1,6 +1,6 @@
 #!flask/bin/python
 from flask import Flask, render_template, redirect, request, url_for, Response, jsonify, abort
-import mysql.connector
+# import mysql.connector
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -51,11 +51,10 @@ def disciplinas():
 
 @app.route('/disciplinas/add', methods = ['POST'])
 def create_disciplina():
-        print(request.method)
+        print(request.method) # HORAS GASTAS: 3
         if request.method == "POST":
                 disc = request.get_json()
                 print(disc)
-                print("cu")
 #         if not request.json or not 'codigo' in request.json or not 'nome' in request.json or not 'ha' in request.json or not 'ementa' in request.json or no>                abort(400)
 
 #         cursor = db.cursor()

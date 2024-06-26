@@ -53,15 +53,15 @@
                         jsonObject[key] = value;
                     });
 
-                    const jsonOutput = document.getElementById('jsonOutput');
-                    jsonOutput.textContent = JSON.stringify(jsonObject, null, 2);
+                    // const jsonOutput = document.getElementById('jsonOutput');
+                    // jsonOutput.textContent = JSON.stringify(jsonObject, null, 2);
 
                     $.ajax({
                         type: 'POST',
                         dataType: "json",
                         contentType:'application/json',
                         url: '/disciplinas/add',
-                        data: jsonOutput.textContent,
+                        data: JSON.stringify(jsonObject),
                         success: function(response) {
                             console.log('Servo moved successfully');
                         },
