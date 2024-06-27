@@ -1,18 +1,18 @@
 #!flask/bin/python
 from flask import Flask, render_template, redirect, request, url_for, Response, jsonify, abort
-# import mysql.connector
+import mysql.connector
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 # Conectar ao banco de dados MySQL
-# db = mysql.connector.connect(
-#     host='localhost',
-#     port='3307',
-#     user='root',
-#     password='blu3024',
-#     database='Universidade'
-# )
+db = mysql.connector.connect(
+    host='localhost',
+    port='3307',
+    user='root',
+    password='blu3024',
+    database='Universidade'
+)
 
 @app.route('/main')
 def main():
@@ -23,35 +23,31 @@ def disciplina():
         if request.method == "GET":
                 disc = request.form["jason"]
                 print(disc)
-#         cursor = db.cursor()
-#         top = codigo
-#         query = <select>
-#         cursor.execute(query)
-#         records = cursor.fetchall()
-        return jsonify({"codigo":disc})
-       # return redirect(url_for("main"))
+        cursor = db.cursor()
+        top = disc
+        query = f"select d1.idDisciplina, d1.Codigo, d1.Nome, d1.H_A, d2.Codigo as Pre_Requisito, d3.Codigo as Equivalente, d1.ementa from (select d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A, GROUP_CONCAT(t.Descricao_topicos SEPARATOR ', ') as ementa from Disciplina d1 join Ementa e on e.idEmenta = d1.fk_idEmenta join Topicos t on t.idTopicos = e.fk_idTopicos group by d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A) d1 left outer join Pre_Requisito pr1 on pr1.idDisciplina_Solicitante = d1.idDisciplina left outer join Disciplina d2 on d2.idDisciplina = pr1.idDisciplina_Requisito left outer join Equivalencia eq on eq.idDisciplina_A = d1.idDisciplina left outer join Disciplina d3 on d3.idDisciplina = eq.idDisciplina_B where d1.Codigo = '{top}'"
+        cursor.execute(query)
+        records = cursor.fetchall()
+        return jsonify({'disciplina_selecionada':records})
 
 @app.route('/disciplinas', methods=['GET'])
 def disciplinas():
-        print("Listando todas as disciplinas")
-        # cursor = db.cursor()
-        # query = <select>  
-	# ## obtenção dos registros do banco de dados
-        # cursor.execute(query)
-        # records = cursor.fetchall()
-        # dicionario = {}
-        # i=1
-        # for record in records:
-        #         chave = f"diciplina {i}"
-        #         valor = record
-        #         dicionario[chave] = valor
-        #         i = i + 1
-        # return jsonify(dicionario)
-        return redirect(url_for("main"))
+        cursor = db.cursor()
+        query = "select d1.idDisciplina, d1.Codigo, d1.Nome, d1.H_A, d2.Codigo as Pre_Requisito, d3.Codigo as Equivalente, d1.ementa from (select d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A, GROUP_CONCAT(t.Descricao_topicos SEPARATOR ', ') as ementa from Disciplina d1 join Ementa e on e.idEmenta = d1.fk_idEmenta join Topicos t on t.idTopicos = e.fk_idTopicos group by d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A) d1 left outer join Pre_Requisito pr1 on pr1.idDisciplina_Solicitante = d1.idDisciplina left outer join Disciplina d2 on d2.idDisciplina = pr1.idDisciplina_Requisito left outer join Equivalencia eq on eq.idDisciplina_A = d1.idDisciplina left outer join Disciplina d3 on d3.idDisciplina = eq.idDisciplina_B order by d1.idDisciplina"
+	## obtenção dos registros do banco de dados
+        cursor.execute(query)
+        records = cursor.fetchall()
+        dicionario = {}
+        i=1
+        for record in records:
+                chave = f"diciplina {i}"
+                valor = record
+                dicionario[chave] = valor
+                i = i + 1
+        return jsonify(dicionario)
 
 @app.route('/disciplinas/add', methods = ['POST'])
-def create_disciplina():
-        print(request.method) # HORAS GASTAS: 3
+def create_disciplina():# HORAS GASTAS: 3
         if request.method == "POST":
                 disc = request.get_json()
                 print(disc)
