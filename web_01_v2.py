@@ -51,8 +51,20 @@ def disciplinas():
 def create_disciplina():# HORAS GASTAS: 3
         if request.method == "POST":
                 disc = request.get_json()
-                # print(disc[])
-        
+                #print(disc)
+                #print(disc['codigo'])
+                #print(disc['nome'])
+                #print(disc['ha'])
+                #print(disc['pr'])
+                #print(disc['eq'])
+                #print(disc['ementa'])
+                #print(request.json)
+                #print(request.json['codigo'])
+                #print(request.json['nome'])
+                #print(request.json['ha'])
+                #print(request.json['pr'])
+                #print(request.json['eq'])
+                #print(request.json['ementa'])
         cursor = db.cursor()
 
         query = "select d1.idDisciplina, d1.Codigo, d1.Nome, d1.H_A, d2.Codigo as Pre_Requisito, d3.Codigo as Equivalente, d1.ementa from (select d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A, GROUP_CONCAT(t.Descricao_topicos SEPARATOR ', ') as ementa from Disciplina d1 join Ementa e on e.idEmenta = d1.fk_idEmenta join Topicos t on t.idTopicos = e.fk_idTopicos group by d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A) d1 left outer join Pre_Requisito pr1 on pr1.idDisciplina_Solicitante = d1.idDisciplina left outer join Disciplina d2 on d2.idDisciplina = pr1.idDisciplina_Requisito left outer join Equivalencia eq on eq.idDisciplina_A = d1.idDisciplina left outer join Disciplina d3 on d3.idDisciplina = eq.idDisciplina_B order by d1.idDisciplina"
@@ -84,18 +96,18 @@ def create_disciplina():# HORAS GASTAS: 3
                 if request.json['pr'] == valor or request.json['pr'] == "":
                         temp_pr = 1
                         id_pr = dicionario[key]['id']
-                if request.json['pr'] != "":
-                        add_pr = 1
+                        if request.json['pr'] != "":
+                        	add_pr = 1
                 # VERIFICANDO SE EQUIVALENCIA EXISTE
                 if request.json['eq'] == valor or request.json['eq'] == "":
                         temp_eq = 1
                         id_eq = dicionario[key]['id']
-                if request.json['eq'] != "":
-                        add_eq = 1
+                        if request.json['eq'] != "":
+                        	add_eq = 1
 
-                if temp_pr == 0 or temp_eq == 0:
-                        return ".\n.\n.\n.\n.\nEquivalente ou Pre-Requisito nao existente\n"
-                        abort(404)
+        if temp_pr == 0 or temp_eq == 0:
+                return ".\n.\n.\n.\n.\nEquivalente ou Pre-Requisito nao existente\n"
+                abort(404)
 
         key = 0
         temp = 0
@@ -105,7 +117,7 @@ def create_disciplina():# HORAS GASTAS: 3
                         id_exist = dicionario[key]['id']
                         temp = 1
                         key = 0
-                break
+                        break
 
 
         if temp == 0:
@@ -220,7 +232,7 @@ def create_disciplina():# HORAS GASTAS: 3
                         values_add_pr = (id_exist, id_pr)
                         cursor.execute(query, values_add_pr)
                         db.commit()
-
+                        
                 query = "SELECT idDisciplina_B from Equivalencia where idDisciplina_A = %s"
                 value_q2 = (id_exist,)
                 cursor.execute(query, value_q2)
