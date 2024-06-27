@@ -10,30 +10,30 @@
         <div>
             <form action="/disciplinas" method="GET">
                 <button type="submit" name="puxa">Listar Disciplinas</button>
-            </form>
+            </form><br>
             <form action="/disciplina" method="POST">
                 <label>Insira o Código da Disciplina:</label>
                 <input type="text" placeholder="Ex: CAC31000" name="cdg" pattern="[A-Z]{3}[0-9]{4}" required>
                 <button type="submit">Pesquisar</button>
-            </form>
+            </form><br>
             <form id="formEnvio" action="/disciplinas/add" method="POST" onsubmit="submitForm(event)">
                 <label for="codigo">Código:</label>
-                <input type="text" id="codigo" name="codigo" required><br>
+                <input type="text" id="codigo" name="codigo" placeholder="Ex: CAC31000" pattern="[A-Z]{3}[0-9]{4}" required><br>
                 
                 <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome" required><br>
+                <input type="text" id="nome" name="nome" placeholder="Ex: Integração" required><br>
 
                 <label for="ementa">Ementa:</label>
-                <input type="text" id="ementa" name="ementa" required><br>
+                <input type="text" id="ementa" name="ementa" placeholder="Ex: Banco de dados" required><br>
 
                 <label for="ha">Hora Aula: </label>
-                <input type="text" id="horaAula" name="ha" required><br>
+                <input type="text" id="horaAula" name="ha" placeholder="Ex: 72" required><br>
 
                 <label for="prereq">Pre-Requisito: </label>
-                <input type="text" id="preRequisito" name="pr" ><br>
+                <input type="text" id="preRequisito" name="pr" placeholder="Ex: CAC31000 ou <vazio>" pattern="[A-Z]{3}[0-9]{4}"><br>
 
                 <label for="equiv">Equivalencia: </label>
-                <input type="text" id="equivalencia" name="eq" ><br>
+                <input type="text" id="equivalencia" name="eq" placeholder="Ex: CAC31000 ou <vazio>" pattern="[A-Z]{3}[0-9]{4}" ><br>
 
                 <button type="submit">Enviar</button>
             </form>
