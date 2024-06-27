@@ -4,6 +4,19 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- <meta charset="UTF-8"> -->
         <title>Webservice SQL</title>
+        <script>
+		function updateFormAction() {
+		    // Obtendo a variável de uma entrada de texto, por exemplo
+		    var variable = document.getElementById('variableInput').value;
+
+		    // Definindo a variável como parte do atributo action do formulário
+		    var form = document.getElementById('myForm');
+		    form.action = '/disciplina/' + variable;
+
+		    // Para debug: mostrando a nova action no console
+		    console.log('Form action atualizado para: ' + form.action);
+		}
+    	</script>
     </head>
     <body>
         <h1>Pesquisas SQL:</h1>
@@ -11,9 +24,9 @@
             <form action="/disciplinas" method="GET">
                 <button type="submit" name="puxa">Listar Disciplinas</button>
             </form><br>
-            <form action="/disciplina" method="POST">
+            <form method="GET" name="myForm">
                 <label>Insira o Código da Disciplina:</label>
-                <input type="text" placeholder="Ex: CAC31000" name="cdg" pattern="[A-Z]{3}[0-9]{4}" required>
+                <input type="text" placeholder="Ex: CAC31000" name="cdg" pattern="[A-Z]{3}[0-9]{4}" id="variableInput" required>
                 <button type="submit">Pesquisar</button>
             </form><br>
             <form id="formEnvio" action="/disciplinas/add" method="POST" onsubmit="submitForm(event)">

@@ -19,13 +19,13 @@ def main():
         return render_template('main.html')
 # /<string:codigo>
 
-@app.route('/disciplina', methods=['GET','POST'])
-def disciplina():
-        if request.method == "POST":
-                disc = request.form["cdg"]
-                print(disc)
+@app.route('/disciplina/<string:codigo>', methods=['GET','POST'])
+def disciplina(codigo):
+        #if request.method == "POST":
+         #       disc = request.form["cdg"]
+          #      print(disc)
         cursor = db.cursor()
-        top = disc
+        top = codigo
         query = f"select d1.idDisciplina, d1.Codigo, d1.Nome, d1.H_A, d2.Codigo as Pre_Requisito, d3.Codigo as Equivalente, d1.ementa from (select d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A, GROUP_CONCAT(t.Descricao_topicos SEPARATOR ', ') as ementa from Disciplina d1 join Ementa e on e.idEmenta = d1.fk_idEmenta join Topicos t on t.idTopicos = e.fk_idTopicos group by d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A) d1 left outer join Pre_Requisito pr1 on pr1.idDisciplina_Solicitante = d1.idDisciplina left outer join Disciplina d2 on d2.idDisciplina = pr1.idDisciplina_Requisito left outer join Equivalencia eq on eq.idDisciplina_A = d1.idDisciplina left outer join Disciplina d3 on d3.idDisciplina = eq.idDisciplina_B where d1.Codigo = '{top}'"
         cursor.execute(query)
         records = cursor.fetchall()
