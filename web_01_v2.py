@@ -7,8 +7,8 @@ app.config['JSON_AS_ASCII'] = False
 
 # Conectar ao banco de dados MySQL
 db = mysql.connector.connect(
-    host='localhost',
-    port='3307',
+    host='mysql-blu3024',
+    port='3306',
     user='root',
     password='blu3024',
     database='Universidade'
@@ -257,4 +257,4 @@ def create_disciplina():# HORAS GASTAS: 3
 
 
 if __name__ == '__main__':
-        app.run(host='localhost', port=8081, debug=True)
+        app.run(host='0.0.0.0', port=8081, debug=True)

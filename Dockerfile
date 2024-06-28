@@ -1,13 +1,27 @@
-FROM python:3.6.1-alpine
+FROM python:3.7-alpine
 
 WORKDIR /app
 
+# Adiciona os arquivos da aplicação ao diretório de trabalho
 ADD . /app
 
-RUN apt-get update
-RUN apt-get upgrade
-RUN apt-get install python-pip
-RUN pip3 install flask
-RUN pip3 install mysql.connector
+# Atualiza o gerenciador de pacotes e instala as dependências necessárias
+RUN apk update && \
+    apk add --no-cache \
+    build-base \
+    libffi-dev \
+    openssl-dev \
+    python3-dev \
+    mariadb-dev
 
-CMD ["python3","web_01_v2.py"]
+# Atualiza o pip para a versão mais recente
+RUN pip3 install --upgrade pip
+
+# Instala as dependências da aplicação
+RUN pip3 install Flask mysql-connector-python
+
+EXPOSE 8081
+
+# Define o comando para iniciar a aplicação
+CMD ["python3", "web_01_v2.py"]
+
