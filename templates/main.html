@@ -22,7 +22,7 @@
         <h1>Pesquisas SQL:</h1>
         <div>
             <form action="/disciplinas" method="GET">
-                <button type="submit" name="puxa">Listar Disciplinas</button>
+                <button type="submit" name="pull">Listar Disciplinas</button>
             </form><br>
             
             
@@ -84,8 +84,8 @@
                     });
                 }
                 
-            </script>
-
+            </script><br><br>
+	    {% block content %}{% endblock %}
         </div>
     </body>
 </html>

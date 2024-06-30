@@ -7,8 +7,8 @@ app.config['JSON_AS_ASCII'] = False
 
 # Conectar ao banco de dados MySQL
 db = mysql.connector.connect(
-    host='mysql-blu3024',
-    port='3306',
+    host= 'localhost', #'mysql-blu3024',
+    port= '3307', #'3306',
     user='root',
     password='blu3024',
     database='Universidade'
@@ -29,7 +29,23 @@ def disciplina(codigo):
         query = f"select d1.idDisciplina, d1.Codigo, d1.Nome, d1.H_A, d2.Codigo as Pre_Requisito, d3.Codigo as Equivalente, d1.ementa from (select d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A, GROUP_CONCAT(t.Descricao_topicos SEPARATOR ', ') as ementa from Disciplina d1 join Ementa e on e.idEmenta = d1.fk_idEmenta join Topicos t on t.idTopicos = e.fk_idTopicos group by d1.Codigo, d1.idDisciplina, d1.Nome, d1.H_A) d1 left outer join Pre_Requisito pr1 on pr1.idDisciplina_Solicitante = d1.idDisciplina left outer join Disciplina d2 on d2.idDisciplina = pr1.idDisciplina_Requisito left outer join Equivalencia eq on eq.idDisciplina_A = d1.idDisciplina left outer join Disciplina d3 on d3.idDisciplina = eq.idDisciplina_B where d1.Codigo = '{top}'"
         cursor.execute(query)
         records = cursor.fetchall()
-        return jsonify({'disciplina_selecionada':records})
+        dicionario = {}
+        chave = "disciplina"
+        dicionario = {
+                'id': records[0][0],
+                'codigo': records[0][1],
+                'nome': records[0][2],
+                'ha': records[0][3],
+                'pr': records[0][4] if records[0][4] else None,
+                'eq': records[0][5] if records[0][5] else None,
+                'ementa': records[0][6]
+        }
+        user_agent = request.headers.get('User-Agent')
+        if 'curl' in user_agent:
+            return jsonify({'disciplina_selecionada':dicionario})
+        else:
+            return render_template('table.html', disciplina=dicionario)
+
 
 @app.route('/disciplinas', methods=['GET'])
 def disciplinas():
@@ -39,13 +55,28 @@ def disciplinas():
         cursor.execute(query)
         records = cursor.fetchall()
         dicionario = {}
+        dic = {}
         i=1
         for record in records:
                 chave = f"diciplina {i}"
                 valor = record
-                dicionario[chave] = valor
+                dic = {
+                'id': record[0],
+                'codigo': record[1],
+                'nome': record[2],
+                'ha': record[3],
+                'pr': record[4] if record[4] else None,
+                'eq': record[5] if record[5] else None,
+                'ementa': record[6]
+        	}
+                dicionario[chave] = dic
                 i = i + 1
-        return jsonify(dicionario)
+        user_agent = request.headers.get('User-Agent')
+        if 'curl' in user_agent:
+            return jsonify(dicionario)
+        else:
+            return render_template('tableHuge.html', dictionary=dicionario)
+
 
 @app.route('/disciplinas/add', methods = ['POST'])
 def create_disciplina():# HORAS GASTAS: 3

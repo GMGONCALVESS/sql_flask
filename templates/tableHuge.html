@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<table border="1">
+    <thread>
+        <tr>
+            <th>id</th>
+            <th>Codigo</th>
+            <th>Nome</th>
+            <th>H/A</th>
+            <th>Pre-Req.</th>
+            <th>Equiv.</th>
+            <th>Ementa</th>
+        </tr>
+    <thread>
+    <tbody>
+        {% for key, disciplina in dictionary.items() %}
+        <tr>
+            <td>{{ disciplina.id }}</td>
+            <td>{{ disciplina.codigo }}</td>
+            <td>{{ disciplina.nome }}</td>
+            <td>{{ disciplina.ha }}</td>
+            <td>{{ disciplina.pr if disciplina.pr is not none else ''}}</td>
+            <td>{{ disciplina.eq if disciplina.eq is not none else ''}}</td>
+            <td>{{ disciplina.ementa }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
