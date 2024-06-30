@@ -7,8 +7,8 @@ app.config['JSON_AS_ASCII'] = False
 
 # Conectar ao banco de dados MySQL
 db = mysql.connector.connect(
-    host= 'localhost', #'mysql-blu3024',
-    port= '3307', #'3306',
+    host= 'localhost',#'mysql-blu3024',#uso interno localhost e 3307
+    port= '3307',#'3306',
     user='root',
     password='blu3024',
     database='Universidade'
@@ -31,15 +31,18 @@ def disciplina(codigo):
         records = cursor.fetchall()
         dicionario = {}
         chave = "disciplina"
-        dicionario = {
-                'id': records[0][0],
-                'codigo': records[0][1],
-                'nome': records[0][2],
-                'ha': records[0][3],
-                'pr': records[0][4] if records[0][4] else None,
-                'eq': records[0][5] if records[0][5] else None,
-                'ementa': records[0][6]
-        }
+        if records == []:
+            dicionario = {}
+        else:
+            dicionario = {
+	        'id': records[0][0] if records[0][0] else None,
+	        'codigo': records[0][1] if records[0][1] else None,
+	        'nome': records[0][2] if records[0][2] else None,
+	        'ha': records[0][3] if records[0][3] else None,
+	        'pr': records[0][4] if records[0][4]  else None,
+	        'eq': records[0][5] if records[0][5]  else None,
+	        'ementa': records[0][6] if records[0][6] else None
+	    }
         user_agent = request.headers.get('User-Agent')
         if 'curl' in user_agent:
             return jsonify({'disciplina_selecionada':dicionario})

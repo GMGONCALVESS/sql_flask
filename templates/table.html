@@ -13,13 +13,13 @@
         <th>Ementa</th>
     </tr>
     <tr>
-    	<td>{{ disciplina.id }}</td>
-        <td>{{ disciplina.codigo }}</td>
-	<td>{{ disciplina.nome }}</td>
-	<td>{{ disciplina.ha }}</td>
+    	<td>{{ disciplina.id if disciplina.id is not none else '' }}</td>
+        <td>{{ disciplina.codigo if disciplina.codigo is not none else '' }}</td>
+	<td>{{ disciplina.nome if disciplina.nome is not none else '' }}</td>
+	<td>{{ disciplina.ha if disciplina.ha is not none else ''}}</td>
         <td>{{ disciplina.pr  if disciplina.pr is not none else '' }}</td>
-        <td>{{ disciplina.eq  if disciplina.pr is not none else '' }}</td>
-        <td>{{ disciplina.ementa }}</td>
+        <td>{{ disciplina.eq  if disciplina.eq is not none else '' }}</td>
+        <td>{{ disciplina.ementa if disciplina.ementa is not none else '' }}</td>
     </tr>
 </table><br>
 
